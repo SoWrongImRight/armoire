@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Import components
+import Layout from "../layouts/layout";
+
 // Import pages
 import Home from "../pages/home/home";
 
@@ -10,7 +13,7 @@ function AppRouter({ router = Router}) {
   return (
     <Router>
       <Routes>
-        <Route>
+        <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
         </Route>
       </Routes>
