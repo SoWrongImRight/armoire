@@ -1,0 +1,33 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: armoire-app
+build:
+  local:
+    push: false
+  artifacts:
+    - image: frontend
+      context: frontEnd
+      docker:
+        dockerfile: Dockerfile
+    - image: backend
+      context: backEnd
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/frontend-deployment.yml
+    - k8s/backend-deployment.yml
+    - k8s/frontend-ingress.yml
+    - k8s/backend-ingress.yml
+deploy:
+  kubectl: {}
+portForward:
+  - resourceType: service
+    resourceName: frontend
+    port: 3000
+    localPort: 3000
+  - resourceType: service
+    resourceName: backend
+    port: 8000
+    localPort: 8000
