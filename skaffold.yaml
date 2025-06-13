@@ -5,12 +5,13 @@ metadata:
 build:
   local:
     push: false
+    useDockerCLI: true
   artifacts:
-    - image: frontend
+    - image: armoire-frontend
       context: frontEnd
       docker:
         dockerfile: Dockerfile
-    - image: backend
+    - image: armoire-backend
       context: backEnd
       docker:
         dockerfile: Dockerfile
@@ -20,6 +21,7 @@ manifests:
     - k8s/backend-deployment.yml
     - k8s/frontend-ingress.yml
     - k8s/backend-ingress.yml
+    - k8s/postgres-deployment.yml
 deploy:
   kubectl: {}
 portForward:
