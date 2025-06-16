@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from app.db.session import get_db
 
 app = FastAPI()
 
@@ -12,6 +14,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers, adjust as needed
 )
 
-@app.get("/api/")
+@app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI application!"}
+
+@app.get("/healthcheck")
+def health_check(db: Session = Depends(get_db)):
+    return {"status": "ok"}

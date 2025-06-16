@@ -12,7 +12,9 @@ const Layout = () => {
         <div>
             <h1>Layout</h1>
             <Menu />
-            <Outlet />
+            <main>
+                <Outlet />
+            </main>
             <Footer />
         </div>
     )

@@ -29,10 +29,11 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/include /usr/local/include
 
 # Copy your application code
-COPY . .
+COPY ./app ./app
 
 # Expose FastAPI default port
 EXPOSE 8000
 
 # Run FastAPI app
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+
