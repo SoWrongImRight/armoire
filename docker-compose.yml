@@ -16,6 +16,9 @@ services:
       - S3_SECRET_KEY=minioadmin
       - S3_BUCKET=armoire
       - S3_REGION=us-east-1
+      # Optional: set OPENWEATHER_API_KEY in your shell to enable weather features
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
+      - WEATHER_DEFAULT_CITY=Orlando
     depends_on:
       db:
         condition: service_started

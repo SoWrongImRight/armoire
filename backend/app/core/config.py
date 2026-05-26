@@ -21,5 +21,9 @@ class Settings:
     JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
+    # Weather (OpenWeather)
+    OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
+    WEATHER_DEFAULT_CITY = os.getenv("WEATHER_DEFAULT_CITY", "Orlando")
+
 
 settings = Settings()

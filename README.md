@@ -100,6 +100,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] Skaffold & kind setup
 - [ ] Mobile app with Flutter
 - [x] OAuth2 password flow with JWT auth (register / login / current user)
+- [x] Weather-based daily outfit recommendations (OpenWeather; set `OPENWEATHER_API_KEY`)
 - [ ] AI-based outfit recommendations
 - [ ] Production-ready Helm charts & CI/CD with Argo CD
 
