@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -6,6 +6,7 @@ from app.api import auth, images, items, weather
 from app.db import models  # noqa: F401  (register models on Base)
 from app.db.database import Base, engine
 from app.db.session import get_db
+from app.realtime import manager
 from app.services import storage_service
 
 app = FastAPI()
@@ -45,3 +46,15 @@ def read_root():
 @app.get("/healthcheck")
 def health_check(db: Session = Depends(get_db)):
     return {"status": "ok"}
+
+
+@app.websocket("/ws")
+async def ws_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            # We don't expect inbound messages; this keeps the socket open
+            # and lets us detect disconnects.
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)

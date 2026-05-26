@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 const CATEGORIES = ["top", "bottom", "outerwear", "shoes", "accessory"];
 const SEASONS = ["spring", "summer", "fall", "winter", "all"];
@@ -40,6 +40,25 @@ const Wardrobe = () => {
   useEffect(() => {
     load();
   }, [load]);
+
+  // Live updates: refresh when any client changes the wardrobe.
+  const loadRef = useRef(load);
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
+  useEffect(() => {
+    const proto = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${proto}://${window.location.host}/ws`);
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg.type === "items_changed") loadRef.current();
+      } catch (err) {
+        /* ignore malformed messages */
+      }
+    };
+    return () => ws.close();
+  }, []);
 
   const onField = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 

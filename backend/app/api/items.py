@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.crud import item as crud
 from app.db.models import Item
 from app.db.session import get_db
+from app.realtime import manager
 from app.schemas.item import ItemCreate, ItemRead, ItemUpdate
 from app.services import storage_service
 
@@ -35,8 +36,10 @@ def list_items(
 
 
 @router.post("", response_model=ItemRead, status_code=201)
-def create_item(data: ItemCreate, db: Session = Depends(get_db)):
-    return serialize(crud.create_item(db, data))
+async def create_item(data: ItemCreate, db: Session = Depends(get_db)):
+    item = crud.create_item(db, data)
+    await manager.broadcast({"type": "items_changed", "action": "created", "id": item.id})
+    return serialize(item)
 
 
 @router.get("/{item_id}", response_model=ItemRead)
@@ -48,16 +51,19 @@ def get_item(item_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch("/{item_id}", response_model=ItemRead)
-def update_item(item_id: int, data: ItemUpdate, db: Session = Depends(get_db)):
+async def update_item(item_id: int, data: ItemUpdate, db: Session = Depends(get_db)):
     item = crud.get_item(db, item_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-    return serialize(crud.update_item(db, item, data))
+    updated = crud.update_item(db, item, data)
+    await manager.broadcast({"type": "items_changed", "action": "updated", "id": item_id})
+    return serialize(updated)
 
 
 @router.delete("/{item_id}", status_code=204)
-def delete_item(item_id: int, db: Session = Depends(get_db)):
+async def delete_item(item_id: int, db: Session = Depends(get_db)):
     item = crud.get_item(db, item_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
     crud.delete_item(db, item)
+    await manager.broadcast({"type": "items_changed", "action": "deleted", "id": item_id})
