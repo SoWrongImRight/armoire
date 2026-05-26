@@ -1,22 +1,40 @@
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+
+from app.api import images
 from app.db.session import get_db
+from app.services import storage_service
 
 app = FastAPI()
 
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Allows all origins, adjust as needed
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods, adjust as needed
-    allow_headers=["*"],  # Allows all headers, adjust as needed
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def ensure_storage():
+    # The compose init job also creates the bucket; this is a best-effort
+    # safety net so the app still works when run outside compose.
+    try:
+        storage_service.ensure_bucket()
+    except Exception as exc:  # noqa: BLE001
+        print(f"ensure_bucket warning: {exc}")
+
+
+app.include_router(images.router)
+
 
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI application!"}
+
 
 @app.get("/healthcheck")
 def health_check(db: Session = Depends(get_db)):

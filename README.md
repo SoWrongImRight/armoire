@@ -31,7 +31,7 @@ The goal of Armoire is to provide a platform for:
 | Database   | PostgreSQL (via Kubernetes service)     |
 | Cloud Infra| Kubernetes, Skaffold, Argo CD           |
 | DevOps     | GitHub Actions, Docker, dotenv          |
-| Storage    | AWS S3 (for storing images)             |
+| Storage    | S3-compatible object storage — MinIO (local), AWS S3 (prod) |
 | API        | OpenWeather API (climate-based insights)|
 
 ---
@@ -41,16 +41,18 @@ The goal of Armoire is to provide a platform for:
 ```bash
 armoire/
 │
-├── app/              # FastAPI backend
-│   ├── db/           # DB models, sessions, migrations
-│   ├── api/          # API routes and logic
-│   └── main.py       # FastAPI entry point
+├── backend/              # FastAPI backend
+│   └── app/
+│       ├── api/          # API routes (image upload/list)
+│       ├── core/         # Settings / config
+│       ├── db/           # SQLAlchemy session & engine
+│       ├── services/     # Storage (S3/MinIO) and other services
+│       └── main.py       # FastAPI entry point
 │
-├── frontEnd/         # React frontend app
-│
-├── infra/            # Kubernetes manifests, Skaffold config
-│
-├── .env              # Environment variables (local only)
+├── frontend/             # React web client
+├── k8s/                  # Kubernetes manifests
+├── argo/                 # Argo CD application
+├── docker-compose.yml    # Local full-stack (api + web + Postgres + MinIO)
 └── README.md
 ```
 
@@ -58,18 +60,20 @@ armoire/
 
 ## 🚀 Getting Started (Local Dev)
 
-```bash
-# Backend (FastAPI)
-cd app
-uvicorn app.main:app --reload
+The full stack runs locally with Docker Compose — FastAPI backend, React frontend, PostgreSQL, and a MinIO (S3-compatible) object store:
 
-# Frontend (React)
-cd frontEnd
-npm install
-npm start
+```bash
+docker compose up --build
 ```
 
-> Note: Backend and frontend communicate over ports 8000 and 3000 respectively.
+| Service        | URL                                              |
+|----------------|--------------------------------------------------|
+| Frontend       | http://localhost:3000                            |
+| Backend API    | http://localhost:8000                            |
+| API docs       | http://localhost:8000/docs                       |
+| MinIO console  | http://localhost:9001 (minioadmin / minioadmin)  |
+
+On startup, a one-shot job creates the `armoire` bucket and grants read access. Open the **Wardrobe** page in the frontend to upload an item photo — images are stored in MinIO and served back through the gallery. The same code targets AWS S3 in production by changing the `S3_*` environment variables.
 
 ---
 
@@ -91,6 +95,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] FastAPI endpoints with dependency injection
 - [x] React frontend UI
 - [x] Dockerized services
+- [x] Image upload backed by S3-compatible object storage (MinIO / AWS S3)
 - [x] Skaffold & kind setup
 - [ ] Mobile app with Flutter
 - [ ] OAuth2 login integration

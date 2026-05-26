@@ -1,13 +1,28 @@
 services:
   backend:
     build: ./backend
-    env_file:
-      - ./backend/.env
     container_name: fastapi-backend
     ports:
       - "8000:8000"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - S3_ENDPOINT_URL=http://minio:9000
+      - S3_PUBLIC_URL=http://localhost:9000
+      - S3_ACCESS_KEY=minioadmin
+      - S3_SECRET_KEY=minioadmin
+      - S3_BUCKET=armoire
+      - S3_REGION=us-east-1
     depends_on:
-      - db
+      db:
+        condition: service_started
+      minio:
+        condition: service_started
+      createbuckets:
+        condition: service_completed_successfully
 
   frontend:
     build: ./frontend
@@ -28,5 +43,35 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  minio:
+    image: minio/minio:latest
+    container_name: armoire-minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio-data:/data
+
+  # One-shot job: wait for MinIO, create the bucket, allow anonymous read.
+  createbuckets:
+    image: minio/mc:latest
+    container_name: armoire-createbuckets
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 minioadmin minioadmin; do
+        echo 'waiting for minio...'; sleep 2;
+      done;
+      mc mb --ignore-existing local/armoire;
+      mc anonymous set download local/armoire;
+      echo 'bucket ready';
+      "
+
 volumes:
   postgres-data:
+  minio-data:
