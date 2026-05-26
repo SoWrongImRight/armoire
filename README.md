@@ -101,6 +101,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [ ] Mobile app with Flutter
 - [x] OAuth2 password flow with JWT auth (register / login / current user)
 - [x] Weather-based daily outfit recommendations (OpenWeather; set `OPENWEATHER_API_KEY`)
+- [x] CI pipeline (GitHub Actions: backend tests, frontend build, compose validation)
 - [ ] AI-based outfit recommendations
 - [ ] Production-ready Helm charts & CI/CD with Argo CD
 
