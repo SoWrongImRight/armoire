@@ -116,7 +116,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] Weather-based daily outfit recommendations (OpenWeather; set `OPENWEATHER_API_KEY`)
 - [x] CI pipeline (GitHub Actions: backend tests, frontend build, compose validation)
 - [x] Real-time wardrobe sync over WebSockets
-- [ ] AI-based outfit recommendations
+- [x] AI outfit recommendations (Claude / Anthropic API; set `ANTHROPIC_API_KEY`)
 - [ ] Production-ready Helm charts & CI/CD with Argo CD
 
 ---

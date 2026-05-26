@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from app.api import auth, images, items, weather
+from app.api import ai, auth, images, items, weather
 from app.db import models  # noqa: F401  (register models on Base)
 from app.db.database import Base, engine
 from app.db.session import get_db
@@ -36,6 +36,7 @@ app.include_router(auth.router)
 app.include_router(images.router)
 app.include_router(items.router)
 app.include_router(weather.router)
+app.include_router(ai.router)
 
 
 @app.get("/")

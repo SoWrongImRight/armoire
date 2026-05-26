@@ -10,6 +10,7 @@ const Menu = () => {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/wardrobe">Wardrobe</Link></li>
                 <li><Link to="/today">Today</Link></li>
+                <li><Link to="/stylist">Stylist</Link></li>
                 <li><Link to="/login">Account</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li>Contact</li>

@@ -25,5 +25,9 @@ class Settings:
     OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
     WEATHER_DEFAULT_CITY = os.getenv("WEATHER_DEFAULT_CITY", "Orlando")
 
+    # AI styling (Anthropic / Claude)
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+    ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-7")
+
 
 settings = Settings()

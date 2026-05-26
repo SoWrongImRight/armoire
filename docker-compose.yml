@@ -19,6 +19,9 @@ services:
       # Optional: set OPENWEATHER_API_KEY in your shell to enable weather features
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
       - WEATHER_DEFAULT_CITY=Orlando
+      # Optional: set ANTHROPIC_API_KEY in your shell to enable AI outfit suggestions
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=claude-opus-4-7
     depends_on:
       db:
         condition: service_started

@@ -9,6 +9,7 @@ import Home from "../pages/home/home";
 import About from "../pages/about/about";
 import Wardrobe from "../pages/wardrobe/wardrobe";
 import Today from "../pages/today/today";
+import Stylist from "../pages/stylist/stylist";
 import Login from "../pages/login/login";
 
 function AppRouter({ router = Router}) {
@@ -21,6 +22,7 @@ function AppRouter({ router = Router}) {
             <Route path="/" element={<Home />} />
             <Route path="/wardrobe" element={<Wardrobe />} />
             <Route path="/today" element={<Today />} />
+            <Route path="/stylist" element={<Stylist />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
         </Route>
