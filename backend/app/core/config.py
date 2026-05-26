@@ -16,5 +16,10 @@ class Settings:
     S3_BUCKET = os.getenv("S3_BUCKET", "armoire")
     S3_REGION = os.getenv("S3_REGION", "us-east-1")
 
+    # Auth / JWT
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
+    JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+
 
 settings = Settings()

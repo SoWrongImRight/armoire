@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from app.api import images, items
+from app.api import auth, images, items
 from app.db import models  # noqa: F401  (register models on Base)
 from app.db.database import Base, engine
 from app.db.session import get_db
@@ -31,6 +31,7 @@ def on_startup():
         print(f"ensure_bucket warning: {exc}")
 
 
+app.include_router(auth.router)
 app.include_router(images.router)
 app.include_router(items.router)
 

@@ -9,6 +9,7 @@ const Menu = () => {
             <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/wardrobe">Wardrobe</Link></li>
+                <li><Link to="/login">Account</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li>Contact</li>
                 <li>Services</li>

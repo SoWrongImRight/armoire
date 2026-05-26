@@ -99,7 +99,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] Wardrobe item catalog — CRUD, category/brand/season filtering, composition summary
 - [x] Skaffold & kind setup
 - [ ] Mobile app with Flutter
-- [ ] OAuth2 login integration
+- [x] OAuth2 password flow with JWT auth (register / login / current user)
 - [ ] AI-based outfit recommendations
 - [ ] Production-ready Helm charts & CI/CD with Argo CD
 
