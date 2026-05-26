@@ -77,6 +77,19 @@ On startup, a one-shot job creates the `armoire` bucket and grants read access. 
 
 ---
 
+## 📱 Mobile App (Flutter)
+
+A Flutter client in [`mobile/`](mobile/) lists and adds wardrobe items through the same API.
+
+```bash
+cd mobile
+flutter pub get
+# Android emulator reaches the host backend at 10.0.2.2; override for other targets:
+flutter run --dart-define=API_BASE_URL=http://localhost:8000
+```
+
+---
+
 ## 🧪 Kubernetes Dev Loop
 
 Using [Skaffold](https://skaffold.dev/) and [kind](https://kind.sigs.k8s.io/) for local Kubernetes deployments.
@@ -98,7 +111,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] Image upload backed by S3-compatible object storage (MinIO / AWS S3)
 - [x] Wardrobe item catalog — CRUD, category/brand/season filtering, composition summary
 - [x] Skaffold & kind setup
-- [ ] Mobile app with Flutter
+- [x] Flutter mobile app — browse and add wardrobe items via the API
 - [x] OAuth2 password flow with JWT auth (register / login / current user)
 - [x] Weather-based daily outfit recommendations (OpenWeather; set `OPENWEATHER_API_KEY`)
 - [x] CI pipeline (GitHub Actions: backend tests, frontend build, compose validation)
