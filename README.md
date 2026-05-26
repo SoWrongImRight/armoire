@@ -96,6 +96,7 @@ This loads Docker images into your kind cluster and watches for changes in sourc
 - [x] React frontend UI
 - [x] Dockerized services
 - [x] Image upload backed by S3-compatible object storage (MinIO / AWS S3)
+- [x] Wardrobe item catalog — CRUD, category/brand/season filtering, composition summary
 - [x] Skaffold & kind setup
 - [ ] Mobile app with Flutter
 - [ ] OAuth2 login integration

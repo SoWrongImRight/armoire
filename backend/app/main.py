@@ -2,7 +2,9 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from app.api import images
+from app.api import images, items
+from app.db import models  # noqa: F401  (register models on Base)
+from app.db.database import Base, engine
 from app.db.session import get_db
 from app.services import storage_service
 
@@ -19,7 +21,8 @@ app.add_middleware(
 
 
 @app.on_event("startup")
-def ensure_storage():
+def on_startup():
+    Base.metadata.create_all(bind=engine)
     # The compose init job also creates the bucket; this is a best-effort
     # safety net so the app still works when run outside compose.
     try:
@@ -29,6 +32,7 @@ def ensure_storage():
 
 
 app.include_router(images.router)
+app.include_router(items.router)
 
 
 @app.get("/")
